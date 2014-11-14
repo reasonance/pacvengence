@@ -45,20 +45,23 @@ void CollisionTypes::initialize(HWND hwnd)
     paddle.setCollisionRadius(COLLISION_RADIUS);
 	paddle.setScale(.5);
 
-	if (!bricks.initialize(this, 0, 0, 0,&brickTM))
-		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
-	bricks.setPosition(VECTOR2(0,0));
-	bricks.setCollision(entityNS::BOX);
-	bricks.setEdge(COLLISION_BOX_PUCK);
-	bricks.setX(bricks.getPositionX());
-	bricks.setY(bricks.getPositionY());
-	bricks.setScale(.5);
+	for(int i=0; i<MAX_GHOSTS; i++)
+	{
+		if (!bricks[i].initialize(this, 0, 0, 0,&brickTM))
+			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		bricks[i].setPosition(VECTOR2(0,0));
+		bricks[i].setCollision(entityNS::BOX);
+		bricks[i].setEdge(COLLISION_BOX_PUCK);
+		bricks[i].setX(bricks[i].getPositionX());
+		bricks[i].setY(bricks[i].getPositionY());
+		bricks[i].setScale(.5);
+	}
 
 	//patternsteps
 	patternStepIndex = 0;
 	for (int i = 0; i< maxPatternSteps; i++)
 	{
-		patternSteps[i].initialize(&bricks);
+		patternSteps[i].initialize(&bricks[0]);
 		patternSteps[i].setActive();
 	}
 	patternSteps[0].setAction(RIGHT);
@@ -121,7 +124,10 @@ void CollisionTypes::update()
 		if(input->isKeyDown(PADDLE_DOWN))
 			paddle.down();
 		paddle.update(frameTime);
-		bricks.update(frameTime);
+		for(int i=0; i<MAX_GHOSTS; i++)
+		{
+			bricks[i].update(frameTime);
+		}
 		break;
 	default:
 		break;
@@ -140,8 +146,10 @@ void CollisionTypes::ai()
 		if (patternSteps[patternStepIndex].isFinished())
 			patternStepIndex++;
 		patternSteps[patternStepIndex].update(frameTime);
-	
-		bricks.ai(frameTime, paddle);
+		for(int i=0; i<MAX_GHOSTS; i++)
+		{
+			bricks[i].ai(frameTime, paddle);
+		}
 	}
 }
 
@@ -154,11 +162,13 @@ void CollisionTypes::collisions()
 	{
 	    collisionVector = D3DXVECTOR2(0,0);
 		collision = false;
-		if (paddle.collidesWith(bricks, collisionVector))
+		for(int i=0; i<MAX_GHOSTS; i++)
 		{
-			collision = true;
-			puck.changeDirectionY();
-			audio->playCue(BEEP1);
+			if(bricks[i].collidesWith(paddle,collisionVector))
+			{
+				collision = true;
+				audio->playCue(BEEP1);
+			}
 		}
 	}
 }
@@ -174,7 +184,10 @@ void CollisionTypes::render()
 	{
 	case PLAY:
 		paddle.draw();
-		bricks.draw();
+		for(int i=0; i<MAX_GHOSTS; i++)
+		{
+			bricks[i].draw();
+		}
 		break;
 	case WIN:
 		break;

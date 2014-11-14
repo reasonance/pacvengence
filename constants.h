@@ -107,6 +107,8 @@ const UCHAR PADDLE_UP = VK_UP;
 const UCHAR PADDLE_DOWN = VK_DOWN;
 
 //
+const int MAX_GHOSTS = 4;
+
 
 // audio files required by audio.cpp
 // WAVE_BANK must be location of .xwb file.

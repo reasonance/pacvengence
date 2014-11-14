@@ -34,7 +34,7 @@ private:
 	Puck puck;
 	int score;
 	bool collision;
-	Brick bricks;	
+	Brick bricks[MAX_GHOSTS];	
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 
