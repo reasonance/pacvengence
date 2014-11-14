@@ -124,5 +124,8 @@ const char HIT[]   = "hit";
 // Pattern Step Action
 enum PATTERN_STEP_ACTION {NONE, UP, DOWN, LEFT, RIGHT, TRACK, EVADE, UPLEFT};
 
+// game state
+enum GameState {PLAY, WIN, LOSE};
+
 
 #endif

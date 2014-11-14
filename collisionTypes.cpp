@@ -74,9 +74,33 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[3].setTimeForStep(1);
 	
 
+
+	gameState = PLAY;
+	timeInState = 0;
+
 	return;
 }
 
+//==============================
+void CollisionTypes::reset()
+{
+
+}
+
+//===========================================================================
+void CollisionTypes::gameStateUpdate()
+{
+	if(gameState == WIN && timeInState >= 0.5 && input->isKeyDown(ENTER_KEY))
+	{
+		gameState = PLAY;
+		reset();
+	}
+	if(gameState == LOSE && timeInState >= 0.5 && input->isKeyDown(ENTER_KEY))
+	{
+		gameState = PLAY;
+		reset();
+	}
+}
 //=============================================================================
 // Update all game items
 //=============================================================================
@@ -85,17 +109,23 @@ void CollisionTypes::update()
 	if(input->isKeyDown(ESC_KEY))
 		exitGame();
 
-	if(input->isKeyDown(PADDLE_LEFT))
-		paddle.left();
-	if(input->isKeyDown(PADDLE_RIGHT))
-		paddle.right();
-	if(input->isKeyDown(PADDLE_UP))
-		paddle.up();
-	if(input->isKeyDown(PADDLE_DOWN))
-		paddle.down();
-	paddle.update(frameTime);
-
-	bricks.update(frameTime);	
+	switch(gameState)
+	{
+	case PLAY:
+		if(input->isKeyDown(PADDLE_LEFT))
+			paddle.left();
+		if(input->isKeyDown(PADDLE_RIGHT))
+			paddle.right();
+		if(input->isKeyDown(PADDLE_UP))
+			paddle.up();
+		if(input->isKeyDown(PADDLE_DOWN))
+			paddle.down();
+		paddle.update(frameTime);
+		bricks.update(frameTime);
+		break;
+	default:
+		break;
+	}
 }
 
 //=============================================================================
@@ -103,13 +133,16 @@ void CollisionTypes::update()
 //=============================================================================
 void CollisionTypes::ai()
 {
-	if (patternStepIndex == maxPatternSteps)
-		return;
-	if (patternSteps[patternStepIndex].isFinished())
-		patternStepIndex++;
-	patternSteps[patternStepIndex].update(frameTime);
-
-	bricks.ai(frameTime, paddle);
+	if(gameState == PLAY)
+	{
+		if (patternStepIndex == maxPatternSteps)
+			return;
+		if (patternSteps[patternStepIndex].isFinished())
+			patternStepIndex++;
+		patternSteps[patternStepIndex].update(frameTime);
+	
+		bricks.ai(frameTime, paddle);
+	}
 }
 
 //=============================================================================
@@ -117,13 +150,16 @@ void CollisionTypes::ai()
 //=============================================================================
 void CollisionTypes::collisions()
 {
-    collisionVector = D3DXVECTOR2(0,0);
-	collision = false;
-	if (paddle.collidesWith(bricks, collisionVector))
+	if(gameState == PLAY)
 	{
-		collision = true;
-		puck.changeDirectionY();
-		audio->playCue(BEEP1);
+	    collisionVector = D3DXVECTOR2(0,0);
+		collision = false;
+		if (paddle.collidesWith(bricks, collisionVector))
+		{
+			collision = true;
+			puck.changeDirectionY();
+			audio->playCue(BEEP1);
+		}
 	}
 }
 
@@ -133,9 +169,19 @@ void CollisionTypes::collisions()
 void CollisionTypes::render()
 {
     graphics->spriteBegin();                // begin drawing sprites
-	paddle.draw();
-
-	bricks.draw();
+	
+	switch(gameState)
+	{
+	case PLAY:
+		paddle.draw();
+		bricks.draw();
+		break;
+	case WIN:
+		break;
+	case LOSE:
+		break;
+	}
+	
     graphics->spriteEnd();                  // end drawing sprites
 }
 

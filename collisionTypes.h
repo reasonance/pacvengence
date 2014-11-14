@@ -38,6 +38,10 @@ private:
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 
+	GameState gameState;
+	float timeInState;
+
+	void gameStateUpdate();
 
 public:
     // Constructor
@@ -45,6 +49,8 @@ public:
 
     // Destructor
     virtual ~CollisionTypes();
+
+	void reset();
 
     // Initialize the game
     void initialize(HWND hwnd);
