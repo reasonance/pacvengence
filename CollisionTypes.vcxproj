@@ -99,6 +99,7 @@
     <ClCompile Include="patternStep.cpp" />
     <ClCompile Include="puck.cpp" />
     <ClCompile Include="textureManager.cpp" />
+    <ClCompile Include="wall.cpp" />
     <ClCompile Include="winmain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +117,7 @@
     <ClInclude Include="patternStep.h" />
     <ClInclude Include="puck.h" />
     <ClInclude Include="textureManager.h" />
+    <ClInclude Include="wall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
