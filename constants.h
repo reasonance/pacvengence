@@ -88,12 +88,12 @@ const float MIN_FRAME_TIME = 1.0f/FRAME_RATE;   // minimum desired time for 1 fr
 const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calculations
 const RECT  COLLISION_RECTANGLE = {-30,-16,30,16};
 const RECT  COLLISION_BOX_PADDLE = {-45,-10,45,10};
-const RECT COLLISION_BOX_PUCK = {-32, -32, 32, 32};
+const RECT COLLISION_BOX_PUCK = {-64, -64, 64, 64};
 const float   COLLISION_RADIUS = 29;
 
 // graphic images
-const char PUCK_IMAGE[] = "pictures\\homework.jpg";  // game textures
-const char PADDLE_IMAGE[] =     "pictures\\student.jpg";      // menu texture
+const char GHOST_IMAGE[] = "pictures\\ghost.png";  // game textures
+const char PLAYER_IMAGE[] = "pictures\\player.png";      // menu texture
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
@@ -112,9 +112,9 @@ const int MAX_GHOSTS = 4;
 
 // audio files required by audio.cpp
 // WAVE_BANK must be location of .xwb file.
-const char WAVE_BANK[]  = "audio\\Win\\WavesExample1.xwb";
+const char WAVE_BANK[]  = "audio\\Win\\Wave Bank.xwb";
 // SOUND_BANK must be location of .xsb file.
-const char SOUND_BANK[] = "audio\\Win\\SoundsExample1.xsb";
+const char SOUND_BANK[] = "audio\\Win\\Sound Bank.xsb";
 
 // audio cues
 const char BEEP1[] = "beep1";

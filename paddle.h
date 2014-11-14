@@ -10,8 +10,8 @@ class Paddle;
 
 namespace paddleNS
 {
-    const int WIDTH = 90;                   // image width
-    const int HEIGHT = 20;                  // image height
+    const int WIDTH = 128;                   // image width
+    const int HEIGHT = 128;                  // image height
     const int X = GAME_WIDTH/2 - WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2 - HEIGHT/2;
     const float SPEED = 120;             

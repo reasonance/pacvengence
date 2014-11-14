@@ -9,7 +9,7 @@ Brick::Brick() : Entity()
     spriteData.height = brickNS::HEIGHT;
     spriteData.x = brickNS::X;                   // location on screen
     spriteData.y = brickNS::Y;
-    spriteData.rect.bottom = brickNS::HEIGHT/2;    // rectangle to select parts of an image
+    spriteData.rect.bottom = brickNS::HEIGHT;    // rectangle to select parts of an image
     spriteData.rect.right = brickNS::WIDTH;
     
 	velocity = D3DXVECTOR2(0,0);
@@ -24,7 +24,6 @@ Brick::Brick() : Entity()
 	spriteData.scale = 1;
 	active = true;
 	speed = 100;
-
 	targetSensed = false;
 }
 

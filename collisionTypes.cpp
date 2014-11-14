@@ -31,37 +31,38 @@ void CollisionTypes::initialize(HWND hwnd)
     Game::initialize(hwnd); // throws GameError
 
 
-    if (!paddleTM.initialize(graphics,PADDLE_IMAGE))
+    if (!paddleTM.initialize(graphics,PLAYER_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
 
-   if (!brickTM.initialize(graphics,PUCK_IMAGE))
+   if (!brickTM.initialize(graphics,GHOST_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
 
-	if (!paddle.initialize(this, paddleTM.getWidth(), paddleTM.getHeight(), 0,&paddleTM))
+   if (!player.initialize(this, paddleNS::WIDTH, paddleNS::HEIGHT, 2, &paddleTM))
 		throw(GameError(gameErrorNS::WARNING, "Paddle not initialized"));
-	paddle.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
-    paddle.setCollisionType(entityNS::BOX);
-    paddle.setEdge(COLLISION_BOX_PADDLE);
-    paddle.setCollisionRadius(COLLISION_RADIUS);
-	paddle.setScale(.5);
+	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
+    player.setCollisionType(entityNS::BOX);
+    player.setEdge(COLLISION_BOX_PADDLE);
+    player.setCollisionRadius(COLLISION_RADIUS);
+	player.setScale(.5);
 
 	for(int i=0; i<MAX_GHOSTS; i++)
 	{
-		if (!bricks[i].initialize(this, 0, 0, 0,&brickTM))
+		if (!ghosts[i].initialize(this, brickNS::WIDTH, brickNS::HEIGHT, 2, &brickTM))
 			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
-		bricks[i].setPosition(VECTOR2(0,0));
-		bricks[i].setCollision(entityNS::BOX);
-		bricks[i].setEdge(COLLISION_BOX_PUCK);
-		bricks[i].setX(bricks[i].getPositionX());
-		bricks[i].setY(bricks[i].getPositionY());
-		bricks[i].setScale(.5);
+		ghosts[i].setPosition(VECTOR2(0,0));
+		ghosts[i].setCollision(entityNS::BOX);
+		ghosts[i].setEdge(COLLISION_BOX_PUCK);
+		ghosts[i].setX(ghosts[i].getPositionX());
+		ghosts[i].setY(ghosts[i].getPositionY());
+		ghosts[i].setCurrentFrame(i);
+		ghosts[i].setScale(.5f);
 	}
 
 	//patternsteps
 	patternStepIndex = 0;
 	for (int i = 0; i< maxPatternSteps; i++)
 	{
-		patternSteps[i].initialize(&bricks[0]);
+		patternSteps[i].initialize(&ghosts[0]);
 		patternSteps[i].setActive();
 	}
 	patternSteps[0].setAction(RIGHT);
@@ -116,17 +117,17 @@ void CollisionTypes::update()
 	{
 	case PLAY:
 		if(input->isKeyDown(PADDLE_LEFT))
-			paddle.left();
+			player.left();
 		if(input->isKeyDown(PADDLE_RIGHT))
-			paddle.right();
+			player.right();
 		if(input->isKeyDown(PADDLE_UP))
-			paddle.up();
+			player.up();
 		if(input->isKeyDown(PADDLE_DOWN))
-			paddle.down();
-		paddle.update(frameTime);
+			player.down();
+		player.update(frameTime);
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
-			bricks[i].update(frameTime);
+			ghosts[i].update(frameTime);
 		}
 		break;
 	default:
@@ -142,13 +143,13 @@ void CollisionTypes::ai()
 	if(gameState == PLAY)
 	{
 		if (patternStepIndex == maxPatternSteps)
-			return;
+			patternStepIndex = 0;
 		if (patternSteps[patternStepIndex].isFinished())
 			patternStepIndex++;
 		patternSteps[patternStepIndex].update(frameTime);
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
-			bricks[i].ai(frameTime, paddle);
+			ghosts[i].ai(frameTime, player);
 		}
 	}
 }
@@ -164,10 +165,9 @@ void CollisionTypes::collisions()
 		collision = false;
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
-			if(bricks[i].collidesWith(paddle,collisionVector))
+			if(ghosts[i].collidesWith(player,collisionVector))
 			{
 				collision = true;
-				audio->playCue(BEEP1);
 			}
 		}
 	}
@@ -183,10 +183,10 @@ void CollisionTypes::render()
 	switch(gameState)
 	{
 	case PLAY:
-		paddle.draw();
+		player.draw();
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
-			bricks[i].draw();
+			ghosts[i].draw();
 		}
 		break;
 	case WIN:

@@ -25,6 +25,9 @@ Paddle::Paddle() : Entity()
 	edge.top = paddleNS::HEIGHT/2;
 	edge.right = -paddleNS::WIDTH/2;
 	edge.left = paddleNS::WIDTH/2;
+	setFrames(0,1);
+	setLoop(true);
+	setFrameDelay(0.4f);
 }
 
 //=============================================================================

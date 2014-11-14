@@ -30,11 +30,11 @@ private:
     // game items
     TextureManager paddleTM, puckTM, brickTM;   // game texture
     VECTOR2 collisionVector;    // collision vector
-	Paddle paddle;
+	Paddle player;
 	Puck puck;
 	int score;
 	bool collision;
-	Brick bricks[MAX_GHOSTS];	
+	Brick ghosts[MAX_GHOSTS];	
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 
