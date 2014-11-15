@@ -131,7 +131,8 @@ void Brick::ai(float time, Entity &t)
 	sense();
 	if(targetSensed)
 	{
-		vectorTrack();
+		//vectorTrack();
+		deltaTrack();
 	}
 	return;
 }
