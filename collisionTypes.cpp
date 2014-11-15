@@ -29,8 +29,7 @@ CollisionTypes::~CollisionTypes()
 void CollisionTypes::initialize(HWND hwnd)
 {
     Game::initialize(hwnd); // throws GameError
-
-
+	
     if (!paddleTM.initialize(graphics,PLAYER_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
 
@@ -39,6 +38,20 @@ void CollisionTypes::initialize(HWND hwnd)
 
    if (!player.initialize(this, paddleNS::WIDTH, paddleNS::HEIGHT, 2, &paddleTM))
 		throw(GameError(gameErrorNS::WARNING, "Paddle not initialized"));
+
+   if (!wallTM.initialize(graphics, "pictures\\wall.png"))
+	   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
+
+   int wallpos[] = {100,200,300,200};
+   int wallrotation[] = {90,90};
+   for (int i=0;i<NUM_WALLS;i++){
+	   if (!walls[i].initialize(this, WallNS::WIDTH, WallNS::HEIGHT, 0, &wallTM))
+		   throw(GameError(gameErrorNS::WARNING, "wall not initialized"));
+	   walls[i].setRadians(wallrotation[i]/180.0*PI);
+	   walls[i].setX(wallpos[i*2]);
+	   walls[i].setY(wallpos[i*2+1]);
+   }
+
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
     player.setCollisionType(entityNS::BOX);
     player.setEdge(COLLISION_BOX_PADDLE);
@@ -163,6 +176,7 @@ void CollisionTypes::collisions()
 	{
 	    collisionVector = D3DXVECTOR2(0,0);
 		collision = false;
+
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
 			if(ghosts[i].collidesWith(player,collisionVector))
@@ -183,11 +197,15 @@ void CollisionTypes::render()
 	switch(gameState)
 	{
 	case PLAY:
+		for (int i=0;i<NUM_WALLS;i++){
+			walls[i].draw();
+		}
 		player.draw();
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
 			ghosts[i].draw();
 		}
+
 		break;
 	case WIN:
 		break;

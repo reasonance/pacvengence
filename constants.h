@@ -90,6 +90,7 @@ const RECT  COLLISION_RECTANGLE = {-30,-16,30,16};
 const RECT  COLLISION_BOX_PADDLE = {-45,-10,45,10};
 const RECT COLLISION_BOX_PUCK = {-64, -64, 64, 64};
 const float   COLLISION_RADIUS = 29;
+const int NUM_WALLS = 2;
 
 // graphic images
 const char GHOST_IMAGE[] = "pictures\\ghost.png";  // game textures
