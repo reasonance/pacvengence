@@ -83,6 +83,21 @@ void CollisionTypes::initialize(HWND hwnd)
 		}
 	}
 
+	if (!winTM.initialize(graphics, "pictures\\win.png"))
+	   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
+	
+	if(!win.initialize(graphics,GAME_WIDTH,GAME_HEIGHT,0,&winTM))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
+	win.setX(0);
+	win.setY(0);
+
+	if (!loseTM.initialize(graphics, "pictures\\lose.png"))
+	   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing win texture"));
+
+	if(!lose.initialize(graphics,GAME_WIDTH,GAME_HEIGHT,0,&loseTM))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing lose texture"));
+	lose.setX(0);
+	lose.setY(0);
 
 	//patternsteps
 	patternStepIndex = 0;
@@ -138,12 +153,13 @@ void CollisionTypes::reset()
 //===========================================================================
 void CollisionTypes::gameStateUpdate()
 {
-	if(gameState == WIN && timeInState >= 0.5 && input->isKeyDown(ENTER_KEY))
+	timeInState += frameTime;
+	if(gameState == WIN && timeInState >= 0.25 && input->isKeyDown(ENTER_KEY))
 	{
 		gameState = PLAY;
 		reset();
 	}
-	if(gameState == LOSE && timeInState >= 0.5 && input->isKeyDown(ENTER_KEY))
+	if(gameState == LOSE && timeInState >= 0.25 && input->isKeyDown(ENTER_KEY))
 	{
 		gameState = PLAY;
 		reset();
@@ -154,6 +170,7 @@ void CollisionTypes::gameStateUpdate()
 //=============================================================================
 void CollisionTypes::update()
 {
+	gameStateUpdate();
 	if(input->isKeyDown(ESC_KEY))
 		exitGame();
 
@@ -280,8 +297,10 @@ void CollisionTypes::render()
 		}
 		break;
 	case WIN:
+		win.draw();
 		break;
 	case LOSE:
+		lose.draw();
 		break;
 	}
 	
@@ -294,6 +313,9 @@ void CollisionTypes::render()
 //=============================================================================
 void CollisionTypes::releaseAll()
 {
+	loseTM.onLostDevice();
+	winTM.onLostDevice();
+	wallTM.onLostDevice();
 	dotTM.onLostDevice();
 	paddleTM.onLostDevice();
 	puckTM.onLostDevice();
@@ -307,6 +329,9 @@ void CollisionTypes::releaseAll()
 //=============================================================================
 void CollisionTypes::resetAll()
 {
+	loseTM.onResetDevice();
+	winTM.onResetDevice();
+	wallTM.onResetDevice();
 	dotTM.onResetDevice();
 	paddleTM.onResetDevice();
 	puckTM.onResetDevice();

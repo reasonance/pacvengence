@@ -47,6 +47,10 @@ private:
 	Dot dots[MAX_DOTS];
 	bool check;
 
+
+	TextureManager winTM, loseTM;
+	Image win, lose;
+
 	void gameStateUpdate();
 
 public:
