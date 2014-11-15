@@ -66,7 +66,13 @@ void CollisionTypes::initialize(HWND hwnd)
 		ghosts[i].setY(ghosts[i].getPositionY());
 		ghosts[i].setCurrentFrame(i);
 		ghosts[i].setScale(.5f);
+		ghosts[i].aiType = i;
 	}
+	ghosts[0].setPosition(VECTOR2(0,0));
+	ghosts[1].setPosition(VECTOR2(GAME_WIDTH - brickNS::WIDTH/2,0));
+	ghosts[2].setPosition(VECTOR2(GAME_WIDTH - brickNS::WIDTH/2,GAME_HEIGHT - brickNS::HEIGHT/2));
+	ghosts[3].setPosition(VECTOR2(0,GAME_HEIGHT - brickNS::HEIGHT/2));
+
 
 	for(int i=0; i<MAX_DOTS; i++)
 	{
@@ -122,6 +128,8 @@ void CollisionTypes::initialize(HWND hwnd)
 
 	gameState = PLAY;
 	timeInState = 0;
+	time = 0;
+	ghostsActive = false;
 
 	return;
 }
@@ -129,13 +137,20 @@ void CollisionTypes::initialize(HWND hwnd)
 //==============================
 void CollisionTypes::reset()
 {
+	ghosts[0].setPosition(VECTOR2(0,0));
+	ghosts[1].setPosition(VECTOR2(GAME_WIDTH - brickNS::WIDTH/2,0));
+	ghosts[2].setPosition(VECTOR2(GAME_WIDTH - brickNS::WIDTH/2,GAME_HEIGHT - brickNS::HEIGHT/2));
+	ghosts[3].setPosition(VECTOR2(0,GAME_HEIGHT - brickNS::HEIGHT/2));
+
+	time = 0;
+	ghostsActive = false;
+	patternStepIndex = 0;
 	for(int i=0; i<MAX_GHOSTS; i++)
 	{
 		ghosts[i].setPosition(VECTOR2(0,0));
 		ghosts[i].setX(ghosts[i].getPositionX());
 		ghosts[i].setY(ghosts[i].getPositionY());
 	}
-
 	for(int i=0; i<4; i++)
 	{
 		for(int j=0; j<4; j++)
@@ -147,6 +162,7 @@ void CollisionTypes::reset()
 	}
 
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
+	player.setVelocity(VECTOR2(0,0);
 
 }
 
@@ -173,6 +189,12 @@ void CollisionTypes::update()
 	gameStateUpdate();
 	if(input->isKeyDown(ESC_KEY))
 		exitGame();
+
+	time += frameTime;
+	if(time >= ACTIVATE_TIME)
+	{
+		ghostsActive = true;
+	}
 
 	switch(gameState)
 	{
@@ -215,7 +237,7 @@ void CollisionTypes::update()
 //=============================================================================
 void CollisionTypes::ai()
 {
-	if(gameState == PLAY)
+	if(gameState == PLAY && ghostsActive)
 	{
 		if (patternStepIndex == maxPatternSteps)
 			patternStepIndex = 0;

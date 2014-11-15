@@ -43,6 +43,8 @@ public:
     // constructor
     Brick();
 
+	int aiType;
+
     // inherited member functions
     virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
                             TextureManager *textureM);

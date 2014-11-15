@@ -110,6 +110,7 @@ const UCHAR PADDLE_DOWN = VK_DOWN;
 //
 const int MAX_GHOSTS = 4;
 const int MAX_DOTS = 16;
+const float ACTIVATE_TIME = 5.0f;
 
 
 // audio files required by audio.cpp

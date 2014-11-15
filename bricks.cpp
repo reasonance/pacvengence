@@ -126,12 +126,20 @@ void Brick::sense()
 void Brick::ai(float time, Entity &t)
 { 
 	targetEntity = t;
-	//deltaTrack();
-	//evade();
 	sense();
 	if(targetSensed)
 	{
-		vectorTrack();
+		switch(aiType)
+		{
+		case 0:
+			deltaTrack();
+		case 1:
+			evade();
+		case 2:
+			deltaTrack();
+		case 3:
+			vectorTrack();
+		}
 	}
 	return;
 }

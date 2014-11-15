@@ -48,6 +48,9 @@ private:
 	bool check;
 
 
+	float time;
+	bool ghostsActive;
+
 	TextureManager winTM, loseTM;
 	Image win, lose;
 
