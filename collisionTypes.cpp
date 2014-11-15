@@ -224,8 +224,6 @@ void CollisionTypes::collisions()
 
 		for (int i=0;i< NUM_WALLS;i++){
 			if (walls[i].collidesWith(player, collisionVector)){
-				//player.setX(player.getX() - player.getVelocity().x *frameTime);
-				//player.setY(player.getY() - player.getVelocity().y *frameTime);
 				player.setPositionX(player.getPositionX() - player.getVelocity().x* frameTime);
 				player.setPositionY(player.getPositionY() - player.getVelocity().y* frameTime);
 			}
@@ -235,6 +233,14 @@ void CollisionTypes::collisions()
 
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
+			for (int j=0;j<NUM_WALLS;j++){
+				if (walls[j].collidesWith(ghosts[i], collisionVector)){
+					ghosts[i].setPositionX(ghosts[i].getPositionX() - ghosts[i].getVelocity().x*frameTime*100);
+					ghosts[i].setPositionY(ghosts[i].getPositionY() - ghosts[i].getVelocity().y*frameTime*100);
+				}
+			}
+
+
 			if(ghosts[i].collidesWith(player,collisionVector))
 			{
 				collision = true;
