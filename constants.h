@@ -89,7 +89,7 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const RECT  COLLISION_RECTANGLE = {-30,-16,30,16};
 const RECT  COLLISION_BOX_PADDLE = {-45,-10,45,10};
 const RECT COLLISION_BOX_PUCK = {-64, -64, 64, 64};
-const float   COLLISION_RADIUS = 29;
+const float COLLISION_RADIUS = 29;
 
 // graphic images
 const char GHOST_IMAGE[] = "pictures\\ghost.png";  // game textures
@@ -108,6 +108,7 @@ const UCHAR PADDLE_DOWN = VK_DOWN;
 
 //
 const int MAX_GHOSTS = 4;
+const int MAX_DOTS = 16;
 
 
 // audio files required by audio.cpp

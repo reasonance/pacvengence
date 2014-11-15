@@ -31,18 +31,18 @@ void CollisionTypes::initialize(HWND hwnd)
     Game::initialize(hwnd); // throws GameError
 
 
-    if (!paddleTM.initialize(graphics,PLAYER_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
+	if (!paddleTM.initialize(graphics,PLAYER_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
 
-   if (!brickTM.initialize(graphics,GHOST_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!brickTM.initialize(graphics,GHOST_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	
+	if(!dotTM.initialize(graphics,"pictures\\dot.png"))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dot textures"));
 
-   if (!player.initialize(this, paddleNS::WIDTH, paddleNS::HEIGHT, 2, &paddleTM))
+	if (!player.initialize(this, paddleNS::WIDTH, paddleNS::HEIGHT, 2, &paddleTM))
 		throw(GameError(gameErrorNS::WARNING, "Paddle not initialized"));
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
-    player.setCollisionType(entityNS::BOX);
-    player.setEdge(COLLISION_BOX_PADDLE);
-    player.setCollisionRadius(COLLISION_RADIUS);
 	player.setScale(.5);
 
 	for(int i=0; i<MAX_GHOSTS; i++)
@@ -50,13 +50,27 @@ void CollisionTypes::initialize(HWND hwnd)
 		if (!ghosts[i].initialize(this, brickNS::WIDTH, brickNS::HEIGHT, 2, &brickTM))
 			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
 		ghosts[i].setPosition(VECTOR2(0,0));
-		ghosts[i].setCollision(entityNS::BOX);
-		ghosts[i].setEdge(COLLISION_BOX_PUCK);
 		ghosts[i].setX(ghosts[i].getPositionX());
 		ghosts[i].setY(ghosts[i].getPositionY());
 		ghosts[i].setCurrentFrame(i);
 		ghosts[i].setScale(.5f);
 	}
+
+	for(int i=0; i<MAX_DOTS; i++)
+	{
+		if (!dots[i].initialize(this, dotNS::WIDTH, dotNS::HEIGHT, 0, &dotTM))
+			throw(GameError(gameErrorNS::WARNING, "dot not initialized"));
+		dots[i].setActive(true);
+	}
+	for(int i=0; i<4; i++)
+	{
+		for(int j=0; j<4; j++)
+		{
+			dots[4*i+j].setX((i+1)*GAME_WIDTH/5);
+			dots[4*i+j].setY((j+1)*GAME_HEIGHT/5);
+		}
+	}
+
 
 	//patternsteps
 	patternStepIndex = 0;
@@ -77,7 +91,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[3].setAction(UP);
 	patternSteps[3].setTimeForStep(1);
 	
-
+	graphics->setBackColor(graphicsNS::CYAN);
 
 	gameState = PLAY;
 	timeInState = 0;
@@ -88,6 +102,24 @@ void CollisionTypes::initialize(HWND hwnd)
 //==============================
 void CollisionTypes::reset()
 {
+	for(int i=0; i<MAX_GHOSTS; i++)
+	{
+		ghosts[i].setPosition(VECTOR2(0,0));
+		ghosts[i].setX(ghosts[i].getPositionX());
+		ghosts[i].setY(ghosts[i].getPositionY());
+	}
+
+	for(int i=0; i<4; i++)
+	{
+		for(int j=0; j<4; j++)
+		{
+			dots[4*i+j].setPositionX((i+1)*GAME_WIDTH/5);
+			dots[4*i+j].setPositionY((j+1)*GAME_HEIGHT/5);
+			dots[4*i+j].setActive(true);
+		}
+	}
+
+	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-150));
 
 }
 
@@ -129,6 +161,20 @@ void CollisionTypes::update()
 		{
 			ghosts[i].update(frameTime);
 		}
+		check = false;
+		for(int i=0; i<MAX_DOTS; i++)
+		{
+			dots[i].update(frameTime);
+			if(dots[i].getActive())
+			{
+				check = true;
+			}
+		}
+		if(check == false)
+		{
+			gameState = WIN;
+			timeInState = 0;
+		}
 		break;
 	default:
 		break;
@@ -168,6 +214,16 @@ void CollisionTypes::collisions()
 			if(ghosts[i].collidesWith(player,collisionVector))
 			{
 				collision = true;
+				gameState = LOSE;
+				timeInState = 0;
+			}
+		}
+		for(int i=0; i<MAX_DOTS; i++)
+		{
+			if(dots[i].getActive() && dots[i].collidesWith(player,collisionVector))
+			{
+				collision = true;
+				dots[i].setActive(false);
 			}
 		}
 	}
@@ -188,6 +244,13 @@ void CollisionTypes::render()
 		{
 			ghosts[i].draw();
 		}
+		for(int i=0; i<MAX_DOTS; i++)
+		{
+			if(dots[i].getActive())
+			{
+				dots[i].draw();
+			}
+		}
 		break;
 	case WIN:
 		break;
@@ -204,6 +267,7 @@ void CollisionTypes::render()
 //=============================================================================
 void CollisionTypes::releaseAll()
 {
+	dotTM.onLostDevice();
 	paddleTM.onLostDevice();
 	puckTM.onLostDevice();
     Game::releaseAll();
@@ -216,6 +280,7 @@ void CollisionTypes::releaseAll()
 //=============================================================================
 void CollisionTypes::resetAll()
 {
+	dotTM.onResetDevice();
 	paddleTM.onResetDevice();
 	puckTM.onResetDevice();
     Game::resetAll();

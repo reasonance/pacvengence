@@ -17,7 +17,7 @@ class CollisionTypes;
 #include "puck.h"
 #include "bricks.h"
 #include "patternStep.h"
-
+#include "dots.h"
 
 #define maxPatternSteps 4
 
@@ -40,6 +40,10 @@ private:
 
 	GameState gameState;
 	float timeInState;
+
+	TextureManager dotTM;
+	Dot dots[MAX_DOTS];
+	bool check;
 
 	void gameStateUpdate();
 

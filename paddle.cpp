@@ -17,14 +17,12 @@ Paddle::Paddle() : Entity()
     startFrame = 0;              // first frame of ship animation
     endFrame     = 0;              // last frame of ship animation
     currentFrame = startFrame;
-    //radius = paddleNS::WIDTH/2.0;                 // collision radius
-    collision = false;
-    collisionType =entityNS::BOX;
-    target = false;
-	edge.bottom = -paddleNS::HEIGHT/2;
-	edge.top = paddleNS::HEIGHT/2;
-	edge.right = -paddleNS::WIDTH/2;
-	edge.left = paddleNS::WIDTH/2;
+	radius = paddleNS::WIDTH/2.0;                 // collision radius
+	collision = false;
+	collisionType = entityNS::CIRCLE;
+	setCollisionType(entityNS::CIRCLE);
+	setCollisionRadius(radius);
+	target = false;
 	setFrames(0,1);
 	setLoop(true);
 	setFrameDelay(0.4f);
