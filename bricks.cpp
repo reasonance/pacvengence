@@ -18,7 +18,9 @@ Brick::Brick() : Entity()
     currentFrame = startFrame;
     radius = brickNS::WIDTH/2.0;                 // collision radius
     collision = false;
-    collisionType =entityNS::BOX;// entityNS::CIRCLE;
+	collisionType = entityNS::CIRCLE;
+	setCollisionType(entityNS::CIRCLE);
+	setCollisionRadius(radius);
     target = false;
 	edge.bottom = -brickNS::HEIGHT/2;
 	spriteData.scale = 1;

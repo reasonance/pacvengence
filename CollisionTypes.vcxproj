@@ -90,6 +90,7 @@
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="bricks.cpp" />
     <ClCompile Include="collisionTypes.cpp" />
+    <ClCompile Include="dots.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="bricks.h" />
     <ClInclude Include="collisionTypes.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="dots.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameError.h" />

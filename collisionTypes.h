@@ -17,7 +17,8 @@ class CollisionTypes;
 #include "puck.h"
 #include "bricks.h"
 #include "patternStep.h"
-
+#include "dots.h"
+#include "wall.h"
 
 #define maxPatternSteps 4
 
@@ -28,8 +29,9 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager paddleTM, puckTM, brickTM;   // game texture
+    TextureManager paddleTM, puckTM, brickTM, wallTM;   // game texture
     VECTOR2 collisionVector;    // collision vector
+	Wall walls[NUM_WALLS];
 	Paddle player;
 	Puck puck;
 	int score;
@@ -40,6 +42,10 @@ private:
 
 	GameState gameState;
 	float timeInState;
+
+	TextureManager dotTM;
+	Dot dots[MAX_DOTS];
+	bool check;
 
 	void gameStateUpdate();
 
