@@ -147,9 +147,7 @@ void CollisionTypes::reset()
 	patternStepIndex = 0;
 	for(int i=0; i<MAX_GHOSTS; i++)
 	{
-		ghosts[i].setPosition(VECTOR2(0,0));
-		ghosts[i].setX(ghosts[i].getPositionX());
-		ghosts[i].setY(ghosts[i].getPositionY());
+		ghosts[i].setVelocity(VECTOR2(0,0));
 	}
 	for(int i=0; i<4; i++)
 	{
