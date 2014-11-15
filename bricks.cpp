@@ -72,7 +72,7 @@ void Brick::update(float frameTime)
 		setPosition(D3DXVECTOR2(getPositionX(),GAME_WIDTH-Image::getHeight()*Image::getScale()));
 	}
 	*/
-	velocity = D3DXVECTOR2(0,0);
+	//velocity = D3DXVECTOR2(0,0);
 	incPosition(foo);
 	Image::setX(getPositionX());
 	Image::setY(getPositionY());
