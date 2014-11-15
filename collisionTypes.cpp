@@ -222,6 +222,17 @@ void CollisionTypes::collisions()
 	    collisionVector = D3DXVECTOR2(0,0);
 		collision = false;
 
+		for (int i=0;i< NUM_WALLS;i++){
+			if (walls[i].collidesWith(player, collisionVector)){
+				//player.setX(player.getX() - player.getVelocity().x *frameTime);
+				//player.setY(player.getY() - player.getVelocity().y *frameTime);
+				player.setPositionX(player.getPositionX() - player.getVelocity().x* frameTime);
+				player.setPositionY(player.getPositionY() - player.getVelocity().y* frameTime);
+			}
+
+		}
+
+
 		for(int i=0; i<MAX_GHOSTS; i++)
 		{
 			if(ghosts[i].collidesWith(player,collisionVector))

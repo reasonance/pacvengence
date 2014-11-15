@@ -49,7 +49,7 @@ void Paddle::update(float frameTime)
 	Entity::update(frameTime);
 
 	incPosition(D3DXVECTOR2(velocity*frameTime));
-	velocity = D3DXVECTOR2(0,0);
+	//velocity = D3DXVECTOR2(0,0);
 
     if (getPositionX() > GAME_WIDTH-getWidth()*getScale()) 
 		setPositionX(GAME_WIDTH-getWidth()*getScale()); 

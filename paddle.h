@@ -59,18 +59,26 @@ public:
     void right()
     {
         velocity.x = paddleNS::SPEED;
+		velocity.y = 0;
+		setRadians(0);
     }
     void left()
     {
         velocity.x = -paddleNS::SPEED;
+		velocity.y = 0;
+		setRadians(PI);
     }
 	void up()
     {
         velocity.y = -paddleNS::SPEED;
+		velocity.x = 0;
+		setRadians(-PI/2);
     }
 	void down()
     {
         velocity.y = paddleNS::SPEED;
+		velocity.x = 0;
+		setRadians(PI/2);
     }
 };
 #endif
